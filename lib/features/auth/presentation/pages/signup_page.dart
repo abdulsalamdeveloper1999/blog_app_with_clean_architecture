@@ -41,17 +41,17 @@ class _SignUpPageState extends State<SignUpPage> {
           listener: (context, state) {
             if (state is AuthFailure) {
               return showSnackBar(context, state.message);
-            }
-          },
-          builder: (context, state) {
-            if (state is AuthLoading) {
-              return const Center(child: Loader());
             } else if (state is AuthSuccess) {
               Navigator.pushAndRemoveUntil(
                 context,
                 BlogPage.route(),
                 (route) => false,
               );
+            }
+          },
+          builder: (context, state) {
+            if (state is AuthLoading) {
+              return const Center(child: Loader());
             }
             return Form(
               key: _formKey,

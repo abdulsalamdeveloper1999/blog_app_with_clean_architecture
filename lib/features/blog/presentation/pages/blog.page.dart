@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:blog_clean_architecture/core/common/widgets/loader.dart';
 import 'package:blog_clean_architecture/core/theme/app_colors.dart';
 import 'package:blog_clean_architecture/core/utils/snackbar.dart';
@@ -64,16 +66,28 @@ class _BlogPageState extends State<BlogPage> {
             child: Loader(),
           );
         } else if (state is BlogDisplaySuccess) {
-          return ListView.builder(
-              itemCount: state.allBlogs.length,
-              itemBuilder: (_, index) {
-                final blogs = state.allBlogs[index];
-                return BlogCard(
-                    blogEntity: blogs,
-                    color: index % 3 == 0
-                        ? AppPallete.gradient1
-                        : AppPallete.gradient2);
-              });
+          return state.allBlogs.isEmpty
+              ? const Center(
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    'No Blogs Available ',
+                    style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: state.allBlogs.length,
+                  itemBuilder: (_, index) {
+                    log(state.allBlogs.length.toString());
+                    final blogs = state.allBlogs[index];
+                    return BlogCard(
+                        blogEntity: blogs,
+                        color: index % 3 == 0
+                            ? AppPallete.gradient1
+                            : AppPallete.gradient2);
+                  });
         } else if (state is BlogFailureState) {
           return Center(child: Text(state.error));
         }

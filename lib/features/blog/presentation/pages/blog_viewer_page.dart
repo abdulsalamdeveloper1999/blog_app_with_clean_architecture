@@ -1,6 +1,7 @@
 import 'package:blog_clean_architecture/core/utils/fromat_date.dart';
 import 'package:blog_clean_architecture/core/utils/reading_time.dart';
 import 'package:blog_clean_architecture/features/blog/domain/entities/blog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class BlogViewerPage extends StatelessWidget {
@@ -56,7 +57,18 @@ class BlogViewerPage extends StatelessWidget {
                 const SizedBox(height: 20),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: Image.network(blogEntity.imageUrl),
+                  child: CachedNetworkImage(
+                    imageUrl: blogEntity.imageUrl,
+                    placeholder: (context, url) => const Center(
+                      child: Column(
+                        children: [
+                          Text('Image is Loading'),
+                          SizedBox(height: 20),
+                          LinearProgressIndicator(),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 Text(

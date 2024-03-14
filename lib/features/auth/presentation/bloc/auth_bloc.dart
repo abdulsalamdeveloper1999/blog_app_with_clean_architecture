@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:blog_clean_architecture/core/common/entities/profile.dart';
 import 'package:blog_clean_architecture/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_clean_architecture/features/auth/domain/usecases/user_login.dart';
@@ -32,26 +33,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthIsUserLoggedIn>(_authIsUserLoggedIn);
   }
 
-  FutureOr<void> _authSignup(
+  Future<void> _authSignup(
     AuthSignUpEvent event,
     Emitter<AuthState> emit,
-  ) {
-    (event, emit) async {
-      final res = await _userSignUp(
-        UserSignupParams(
-          name: event.name,
-          email: event.email,
-          password: event.password,
-        ),
-      );
-      res.fold(
-        (failure) => emit(AuthFailure(message: failure.message)),
-        (user) => _emitAuthSuccess(user, emit),
-      );
-    };
+  ) async {
+    final res = await _userSignUp(
+      UserSignupParams(
+        name: event.name,
+        email: event.email,
+        password: event.password,
+      ),
+    );
+    res.fold(
+      (failure) => emit(AuthFailure(message: failure.message)),
+      (user) => _emitAuthSuccess(user, emit),
+    );
   }
 
-  FutureOr<void> _authLogin(
+  Future<void> _authLogin(
     AuthLoginEvent event,
     Emitter<AuthState> emit,
   ) async {
@@ -84,6 +83,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   void onChange(Change<AuthState> change) {
+    log(change.toString());
     super.onChange(change);
   }
 }
